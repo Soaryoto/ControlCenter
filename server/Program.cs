@@ -1,35 +1,25 @@
-﻿using System;
-using System.Threading;
-using System.Windows.Forms;
-using Gma.System.MouseKeyHook;
-
-namespace Soaryoto {
+﻿namespace Soaryoto {
     internal class Program
     {
-        private static IKeyboardMouseEvents? _globalHook;
+        private static Task serverTask = null!;
+        
         static void Main(string[] args)
         {
-            _globalHook = Hook.GlobalEvents();
-            _globalHook.KeyDown += GlobalHook_KeyDown;
+            ButtonInterceptor.Start();
+            MicrophoneListener.StartListening();
 
-            Console.WriteLine("Глобальный перехват запущен.");
-            Console.WriteLine("Нажмите Esc в окне консоли, чтобы завершить.");
+            WebSocketServer wsServer = new WebSocketServer();
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            serverTask = Task.Run(() => wsServer.StartAsync(cts.Token));
 
             Application.Run();
-
-            _globalHook.KeyDown -= GlobalHook_KeyDown;
-            _globalHook.Dispose();
-        }
-
-        private static void GlobalHook_KeyDown(object sender, KeyEventArgs e)
-        {
-            Console.WriteLine($"KeyDown: {e.KeyCode}");
             
-            if (e.KeyCode == Keys.Escape)
-            {
-                Application.Exit();
-            }
+            cts.Cancel();
+            Task.Run(() => wsServer.StopAsync()).Wait();
+            
+            ButtonInterceptor.Stop();
+            MicrophoneListener.StopListening();
         }
-
     }
 }

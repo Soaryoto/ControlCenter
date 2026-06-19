@@ -1,0 +1,18 @@
+/* ─── Сброс ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ─── Оверлей (прозрачный фон для OBS) ─────────────────────── */
+body {
+  background: transparent;
+  overflow: hidden;
+}
+
+.overlay {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 24px;
+  pointer-events: none;
+}

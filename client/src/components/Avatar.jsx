@@ -1,5 +1,5 @@
-import avatar_idle from "../assets/avatar/idle_lea.webp";
-import avatar_talking from "../assets/avatar/talking_lea.webp";
+import avatar_idle from "../assets/avatar/idle.webp";
+import avatar_talking from "../assets/avatar/talking.webp";
 
 function Avatar({ isTalking }) {
 

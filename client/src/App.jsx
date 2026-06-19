@@ -3,6 +3,7 @@ import "./App.css";
 import Avatar from "./components/Avatar";
 import CupOfCoffee from "./components/CupOfCofee";
 import SteamFromCup from "./components/SteamFromCup";
+import EyeComponent from "./components/EyeComponent";
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
     return (
       <div className="app-container">
         <Avatar isTalking={isTalking} />
+        <EyeComponent />
         <CupOfCoffee />
         <SteamFromCup />
       </div>

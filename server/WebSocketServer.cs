@@ -1,27 +1,40 @@
 using System.Net;
 using System.Net.WebSockets;
 using System.Text;
+using Soaryoto.Interfaces;
 
 namespace Soaryoto
 {
-    public class WebSocketServer
+    public class WebSocketServer : IWebSocketServer
     {
-        private readonly int _port;
+        private readonly int _port = 8765;
         private readonly HttpListener _listener;
         private readonly List<WebSocket> _clients = new();
         private readonly object _lock = new();
+        private CancellationTokenSource _cts = new();
 
-        public WebSocketServer(int port = 8765) // Организуем сервер на порту 8765 по умолчанию
+        public WebSocketServer()
         {
-            _port = port;
             _listener = new HttpListener();
-            _listener.Prefixes.Add($"http://localhost:{port}/");
+            _listener.Prefixes.Add($"http://localhost:{this._port}/");
+        }
+
+        public void StartService()
+        {
+            _cts = new CancellationTokenSource();
+            Task.Run(() => StartAsync(_cts.Token));
+        }
+
+        public void StopService()
+        {
+            _cts.Cancel();
+            StopAsync().GetAwaiter().GetResult();
         }
 
         public async Task StartAsync(CancellationToken ct)
         {
             _listener.Start();
-            ConsoleWriter.WriteLine($"[WS] Сервер запущен на ws://localhost:{_port}", ConsoleColor.White);
+            ConsoleWriter.WriteLine($"[WS] Сервер запущен на ws://localhost:{_port}", ConsoleColor.Green);
 
             while (!ct.IsCancellationRequested)
             {
@@ -96,7 +109,16 @@ namespace Soaryoto
             }
         }
 
-        public async Task BroadcastAsync(string json)
+        public void Broadcast(string json)
+        {
+            _ = BroadcastAsync(json).ContinueWith(t =>
+            {
+                if (t.Exception != null)
+                    ConsoleWriter.WriteLine($"[WS] Ошибка при broadcast: {t.Exception.InnerException?.Message}", ConsoleColor.Red);
+            }, TaskContinuationOptions.OnlyOnFaulted);
+        }
+
+        private async Task BroadcastAsync(string json)
         {
             var bytes = Encoding.UTF8.GetBytes(json);
             var segment = new ArraySegment<byte>(bytes);

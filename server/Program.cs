@@ -1,25 +1,26 @@
-﻿namespace Soaryoto {
+﻿using Soaryoto.Interfaces;
+
+namespace Soaryoto {
     internal class Program
     {
-        private static Task serverTask = null!;
+        private static ServiceContainer _serviceContainer = new ServiceContainer();
         
         static void Main(string[] args)
         {
-            ButtonInterceptor.Start();
-            MicrophoneListener.StartListening();
+            FillServiceContainer();
 
-            WebSocketServer wsServer = new WebSocketServer();
-            CancellationTokenSource cts = new CancellationTokenSource();
-
-            serverTask = Task.Run(() => wsServer.StartAsync(cts.Token));
+            _serviceContainer.StartAll();
 
             Application.Run();
-            
-            cts.Cancel();
-            Task.Run(() => wsServer.StopAsync()).Wait();
-            
-            ButtonInterceptor.Stop();
-            MicrophoneListener.StopListening();
+
+            _serviceContainer.StopAll();
+        }
+
+        static void FillServiceContainer()
+        {
+            _serviceContainer.RegisterSingleton<IWebSocketServer, WebSocketServer>();
+            _serviceContainer.RegisterSingleton<IMicrophoneListener, MicrophoneListener>();
+            _serviceContainer.RegisterSingleton<IButtonInterceptor, ButtonInterceptor>();
         }
     }
 }

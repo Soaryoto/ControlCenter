@@ -1,12 +1,23 @@
+using Soaryoto.Interfaces;
 using Gma.System.MouseKeyHook;
 
 namespace Soaryoto
 {
-    public class ButtonInterceptor
+    public class ButtonInterceptor : IButtonInterceptor
     {
-        private static IKeyboardMouseEvents? _globalHook;
+        private IKeyboardMouseEvents? _globalHook;
 
-        public static void Start()
+        public void StartService()
+        {
+            Start();
+        }
+        public void StopService()
+        {
+            Stop();
+        }
+
+
+        private void Start()
         {
             _globalHook = Hook.GlobalEvents();
             _globalHook.KeyDown += GlobalHook_KeyDown;
@@ -15,7 +26,7 @@ namespace Soaryoto
             ConsoleWriter.WriteLine("[BTN] Нажмите Esc в окне консоли, чтобы завершить.", ConsoleColor.Green);
         }
 
-        public static void Stop()
+        private void Stop()
         {
             if (_globalHook != null)
             {
@@ -26,7 +37,7 @@ namespace Soaryoto
             }
         }
 
-        private static void GlobalHook_KeyDown(object? sender, KeyEventArgs e)
+        private void GlobalHook_KeyDown(object? sender, KeyEventArgs e)
         {
             ConsoleWriter.WriteLine($"[BTN] KeyDown: {e.KeyCode}", ConsoleColor.White);
             

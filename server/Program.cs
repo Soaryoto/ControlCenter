@@ -20,7 +20,7 @@ namespace Soaryoto {
         {
             _serviceContainer.RegisterSingleton<IWebSocketServer, WebSocketServer>();
             _serviceContainer.RegisterSingleton<IMicrophoneListener, MicrophoneListener>();
-            _serviceContainer.RegisterSingleton<IButtonInterceptor, ButtonInterceptor>();
+            //_serviceContainer.RegisterSingleton<IButtonInterceptor, ButtonInterceptor>();
         }
     }
 }

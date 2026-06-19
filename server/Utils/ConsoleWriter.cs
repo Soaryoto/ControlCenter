@@ -1,4 +1,4 @@
-namespace Soaryoto
+namespace Soaryoto.Utils
 {
     public class ConsoleWriter
     {

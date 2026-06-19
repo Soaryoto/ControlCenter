@@ -1,4 +1,6 @@
 using Soaryoto.Interfaces;
+using Soaryoto.Utils;
+using Soaryoto.Messages;
 using NAudio.Wave;
 
 namespace Soaryoto
@@ -8,7 +10,7 @@ namespace Soaryoto
         private readonly IWebSocketServer _webSocketServer;
         private WaveInEvent? _waveIn;
         private int _deviceIndex = 0; // Индекс устройства для записи (0 - по умолчанию)
-        private int _minAmplitudeForTalking = 1000;
+        private int _minAmplitudeForTalking = 700;
         private int lastLoudTime = 0;
         private int _silenceThreshold = 300; // Время в миллисекундах, после которого считается, что пользователь перестал говорить
         private bool _isTalking = false;
@@ -88,7 +90,12 @@ namespace Soaryoto
         private void NextStateValue()
         {
             _isTalking = !_isTalking;
-            _webSocketServer.Broadcast($"{{\"isTalking\": {_isTalking.ToString().ToLower()}}}");
+            WebSocketMessage message = new WebSocketMessage(
+                "Avatar",
+                "isTalking",
+                new { isTalking = _isTalking }
+            );
+            _webSocketServer.Broadcast(message);
         }
 
         public void StartService()

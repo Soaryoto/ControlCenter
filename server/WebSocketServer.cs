@@ -1,7 +1,10 @@
+using Soaryoto.Interfaces;
+using Soaryoto.Utils;
+using Soaryoto.Messages;
+using Soaryoto.Extensions;
 using System.Net;
 using System.Net.WebSockets;
 using System.Text;
-using Soaryoto.Interfaces;
 
 namespace Soaryoto
 {
@@ -109,9 +112,9 @@ namespace Soaryoto
             }
         }
 
-        public void Broadcast(string json)
+        public void Broadcast(WebSocketMessage webSocketMessage)
         {
-            _ = BroadcastAsync(json).ContinueWith(t =>
+            _ = BroadcastAsync(webSocketMessage.ToJson()).ContinueWith(t =>
             {
                 if (t.Exception != null)
                     ConsoleWriter.WriteLine($"[WS] Ошибка при broadcast: {t.Exception.InnerException?.Message}", ConsoleColor.Red);

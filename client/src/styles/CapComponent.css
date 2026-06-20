@@ -1,0 +1,17 @@
+.cap-container {
+    position: absolute;
+    top: -70px;
+    left: 330px;
+    width: 630px;
+    height: 630px;
+}
+
+.cap-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.miner-cap {
+    transform: scaleX(-1) rotate(20deg);
+}

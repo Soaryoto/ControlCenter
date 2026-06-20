@@ -1,3 +1,4 @@
+import "../styles/CupOfCoffee.css";
 import cup_of_coffee_without_pair from "../assets/items/CupOfCoffeeWithoutPair.webp";
 
 

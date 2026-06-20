@@ -1,6 +1,7 @@
+import "../styles/EyeComponent.css";
 import eye_right from "../assets/avatar/eye_right.webp";
 import eye_left from "../assets/avatar/eye_left.webp";
-import "../styles/EyeComponent.css";
+
 
 function EyeComponent() {
     return (

@@ -2,10 +2,10 @@ import "../styles/SteamFromCup.css";
 
 function StemFromCap() {
     return (
-        <div class="steam-container">
-            <div class="steam"></div>
-            <div class="steam"></div>
-            <div class="steam"></div>
+        <div className="steam-container">
+            <div className="steam"></div>
+            <div className="steam"></div>
+            <div className="steam"></div>
         </div>
     );
 }

@@ -1,5 +1,11 @@
 import { useState, useEffect  } from "react";
 import "./App.css";
+
+// Список сервисов
+import webSocketService from "./services/WebSocketService";
+import messageDispatcher from "./services/MessageDispatcher";
+
+// Визуальные компоненты
 import Avatar from "./components/Avatar";
 import CupOfCoffee from "./components/CupOfCoffee";
 import SteamFromCup from "./components/SteamFromCup";
@@ -12,17 +18,16 @@ function App() {
     const [isTalking, setIsTalking] = useState(false);
     
     useEffect(() => {
-      const socket = new WebSocket("ws://localhost:8765");
-      socket.onmessage = (event) => {
-        console.log("event.data: ", event.data);
-        const data = JSON.parse(event.data);
-        if (data.Payload.isTalking != undefined) {
-          setIsTalking(data.Payload.isTalking);
-        }
-      };
+      messageDispatcher.register("Avatar", "isTalking", (payload) => {
+          setIsTalking(payload.isTalking);
+      });
+
+      webSocketService.connect((json) => {
+        messageDispatcher.dispatch(json);
+      });
 
       return () => {
-        socket.close();
+        webSocketService.disconnect();
       };
     }, []);
     

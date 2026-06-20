@@ -6,7 +6,10 @@ class WebSocketService {
             onMessage(event.data);
         };
     }
-    
+
+    disconnect() {
+        this.socket?.close();
+    }
 }
 
 export default new WebSocketService();

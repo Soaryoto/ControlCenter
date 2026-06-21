@@ -1,9 +1,8 @@
 using Soaryoto.Messages;
 
-namespace Soaryoto.Interfaces
+namespace Soaryoto.Interfaces;
+
+public interface IWebSocketServer : ILaunchedService
 {
-    public interface IWebSocketServer : ILaunchedService
-    {
-        void Broadcast(WebSocketMessage webSocketMessage);
-    }
+    void Broadcast(WebSocketMessage webSocketMessage);
 }

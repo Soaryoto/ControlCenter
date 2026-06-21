@@ -1,8 +1,7 @@
-namespace Soaryoto.Interfaces
-{
-    public interface ILaunchedService
+namespace Soaryoto.Interfaces;
+
+public interface ILaunchedService
     {
         void StartService();
         void StopService();
     }
-}

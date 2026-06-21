@@ -1,26 +1,25 @@
 ﻿using Soaryoto.Interfaces;
 
-namespace Soaryoto {
-    internal class Program
+namespace Soaryoto;
+sealed class Program
+{
+    private static ServiceContainer _serviceContainer = new ServiceContainer();
+    
+    static void Main(string[] args)
     {
-        private static ServiceContainer _serviceContainer = new ServiceContainer();
-        
-        static void Main(string[] args)
-        {
-            FillServiceContainer();
+        FillServiceContainer();
 
-            _serviceContainer.StartAll();
+        _serviceContainer.StartAll();
 
-            Application.Run();
+        Application.Run();
 
-            _serviceContainer.StopAll();
-        }
+        _serviceContainer.StopAll();
+    }
 
-        static void FillServiceContainer()
-        {
-            _serviceContainer.RegisterSingleton<IWebSocketServer, WebSocketServer>();
-            _serviceContainer.RegisterSingleton<IMicrophoneListener, MicrophoneListener>();
-            //_serviceContainer.RegisterSingleton<IButtonInterceptor, ButtonInterceptor>();
-        }
+    static void FillServiceContainer()
+    {
+        _serviceContainer.RegisterSingleton<IWebSocketServer, WebSocketServer>();
+        _serviceContainer.RegisterSingleton<IMicrophoneListener, MicrophoneListener>();
+        //_serviceContainer.RegisterSingleton<IButtonInterceptor, ButtonInterceptor>();
     }
 }

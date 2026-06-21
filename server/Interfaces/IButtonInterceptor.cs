@@ -1,4 +1,3 @@
-namespace Soaryoto.Interfaces
-{
-    public interface IButtonInterceptor : ILaunchedService { }
-}
+namespace Soaryoto.Interfaces;
+
+public interface IButtonInterceptor : ILaunchedService { }

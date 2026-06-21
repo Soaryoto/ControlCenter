@@ -6,139 +6,138 @@ using System.Net;
 using System.Net.WebSockets;
 using System.Text;
 
-namespace Soaryoto
+namespace Soaryoto;
+
+public sealed class WebSocketServer : IWebSocketServer
 {
-    public class WebSocketServer : IWebSocketServer
+    private readonly int _port = 8765;
+    private readonly HttpListener _listener;
+    private readonly List<WebSocket> _clients = new();
+    private readonly object _lock = new();
+    private CancellationTokenSource _cts = new();
+
+    public WebSocketServer()
     {
-        private readonly int _port = 8765;
-        private readonly HttpListener _listener;
-        private readonly List<WebSocket> _clients = new();
-        private readonly object _lock = new();
-        private CancellationTokenSource _cts = new();
+        _listener = new HttpListener();
+        _listener.Prefixes.Add($"http://localhost:{this._port}/");
+    }
 
-        public WebSocketServer()
+    public void StartService()
+    {
+        _cts = new CancellationTokenSource();
+        Task.Run(() => StartAsync(_cts.Token));
+    }
+
+    public void StopService()
+    {
+        _cts.Cancel();
+        StopAsync().GetAwaiter().GetResult();
+    }
+
+    public async Task StartAsync(CancellationToken ct)
+    {
+        _listener.Start();
+        ConsoleWriter.WriteLine($"[WS] Сервер запущен на ws://localhost:{_port}", ConsoleColor.Green);
+
+        while (!ct.IsCancellationRequested)
         {
-            _listener = new HttpListener();
-            _listener.Prefixes.Add($"http://localhost:{this._port}/");
-        }
-
-        public void StartService()
-        {
-            _cts = new CancellationTokenSource();
-            Task.Run(() => StartAsync(_cts.Token));
-        }
-
-        public void StopService()
-        {
-            _cts.Cancel();
-            StopAsync().GetAwaiter().GetResult();
-        }
-
-        public async Task StartAsync(CancellationToken ct)
-        {
-            _listener.Start();
-            ConsoleWriter.WriteLine($"[WS] Сервер запущен на ws://localhost:{_port}", ConsoleColor.Green);
-
-            while (!ct.IsCancellationRequested)
-            {
-                try
-                {
-                    var context = await _listener.GetContextAsync().WaitAsync(ct);
-
-                    if (context.Request.IsWebSocketRequest)
-                    {
-                        _ = HandleClientAsync(context, ct);
-                    }
-                    else
-                    {
-                        context.Response.StatusCode = 400;
-                        context.Response.Close();
-                    }
-                }
-                catch (OperationCanceledException) { break; }
-                catch (Exception ex)
-                {
-                    ConsoleWriter.WriteLine($"[WS] Ошибка: {ex.Message}", ConsoleColor.Red);
-                }
-            }
-        }
-
-        public async Task StopAsync()
-        {
-            _listener.Stop();
-            List<WebSocket> snapshot;
-            lock (_lock) snapshot = _clients.ToList();
-
-            var tasks = snapshot
-                .Where(ws => ws.State == WebSocketState.Open)
-                .Select(ws => ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None));
-
-            await Task.WhenAll(tasks);
-            ConsoleWriter.WriteLine($"[WS] Сервер остановлен", ConsoleColor.Red);
-        }
-        
-        private async Task HandleClientAsync(HttpListenerContext context, CancellationToken ct)
-        {
-            var wsContext = await context.AcceptWebSocketAsync(null);
-            var ws = wsContext.WebSocket;
-
-            lock (_lock) _clients.Add(ws);
-
-            var ip = context.Request.RemoteEndPoint?.ToString() ?? "unknown";
-            ConsoleWriter.WriteLine($"[WS] Клиент подключился: {ip}  (всего: {_clients.Count})", ConsoleColor.Cyan);
-
-            var buffer = new byte[1024];
-
             try
             {
-                while (ws.State == WebSocketState.Open && !ct.IsCancellationRequested)
-                {
-                    var result = await ws.ReceiveAsync(buffer, ct);
+                var context = await _listener.GetContextAsync().WaitAsync(ct);
 
-                    if (result.MessageType == WebSocketMessageType.Close)
-                        break;
+                if (context.Request.IsWebSocketRequest)
+                {
+                    _ = HandleClientAsync(context, ct);
+                }
+                else
+                {
+                    context.Response.StatusCode = 400;
+                    context.Response.Close();
                 }
             }
-            catch { /* клиент отвалился */ }
-            finally
+            catch (OperationCanceledException) { break; }
+            catch (Exception ex)
             {
-                lock (_lock) _clients.Remove(ws);
-                ConsoleWriter.WriteLine($"[WS] Клиент отключился: {ip}  (всего: {_clients.Count})", ConsoleColor.DarkYellow);
-
-                if (ws.State == WebSocketState.Open)
-                    await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
-
-                ws.Dispose();
+                ConsoleWriter.WriteLine($"[WS] Ошибка: {ex.Message}", ConsoleColor.Red);
             }
         }
+    }
 
-        public void Broadcast(WebSocketMessage webSocketMessage)
+    public async Task StopAsync()
+    {
+        _listener.Stop();
+        List<WebSocket> snapshot;
+        lock (_lock) snapshot = _clients.ToList();
+
+        var tasks = snapshot
+            .Where(ws => ws.State == WebSocketState.Open)
+            .Select(ws => ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None));
+
+        await Task.WhenAll(tasks);
+        ConsoleWriter.WriteLine($"[WS] Сервер остановлен", ConsoleColor.Red);
+    }
+    
+    private async Task HandleClientAsync(HttpListenerContext context, CancellationToken ct)
+    {
+        var wsContext = await context.AcceptWebSocketAsync(null);
+        var ws = wsContext.WebSocket;
+
+        lock (_lock) _clients.Add(ws);
+
+        var ip = context.Request.RemoteEndPoint?.ToString() ?? "unknown";
+        ConsoleWriter.WriteLine($"[WS] Клиент подключился: {ip}  (всего: {_clients.Count})", ConsoleColor.Cyan);
+
+        var buffer = new byte[1024];
+
+        try
         {
-            _ = BroadcastAsync(webSocketMessage.ToJson()).ContinueWith(t =>
+            while (ws.State == WebSocketState.Open && !ct.IsCancellationRequested)
             {
-                if (t.Exception != null)
-                    ConsoleWriter.WriteLine($"[WS] Ошибка при broadcast: {t.Exception.InnerException?.Message}", ConsoleColor.Red);
-            }, TaskContinuationOptions.OnlyOnFaulted);
-        }
+                var result = await ws.ReceiveAsync(buffer, ct);
 
-        private async Task BroadcastAsync(string json)
+                if (result.MessageType == WebSocketMessageType.Close)
+                    break;
+            }
+        }
+        catch { /* клиент отвалился */ }
+        finally
         {
-            var bytes = Encoding.UTF8.GetBytes(json);
-            var segment = new ArraySegment<byte>(bytes);
+            lock (_lock) _clients.Remove(ws);
+            ConsoleWriter.WriteLine($"[WS] Клиент отключился: {ip}  (всего: {_clients.Count})", ConsoleColor.DarkYellow);
 
-            List<WebSocket> snapshot;
-            lock (_lock) snapshot = _clients.ToList();
+            if (ws.State == WebSocketState.Open)
+                await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
 
-            var tasks = snapshot
-                .Where(ws => ws.State == WebSocketState.Open)
-                .Select(ws => ws.SendAsync(segment, WebSocketMessageType.Text, true, CancellationToken.None));
-
-            await Task.WhenAll(tasks);
+            ws.Dispose();
         }
+    }
 
-        public int ClientCount
+    public void Broadcast(WebSocketMessage webSocketMessage)
+    {
+        _ = BroadcastAsync(webSocketMessage.ToJson()).ContinueWith(t =>
         {
-            get { lock (_lock) return _clients.Count; }
-        }
+            if (t.Exception != null)
+                ConsoleWriter.WriteLine($"[WS] Ошибка при broadcast: {t.Exception.InnerException?.Message}", ConsoleColor.Red);
+        }, TaskContinuationOptions.OnlyOnFaulted);
+    }
+
+    private async Task BroadcastAsync(string json)
+    {
+        var bytes = Encoding.UTF8.GetBytes(json);
+        var segment = new ArraySegment<byte>(bytes);
+
+        List<WebSocket> snapshot;
+        lock (_lock) snapshot = _clients.ToList();
+
+        var tasks = snapshot
+            .Where(ws => ws.State == WebSocketState.Open)
+            .Select(ws => ws.SendAsync(segment, WebSocketMessageType.Text, true, CancellationToken.None));
+
+        await Task.WhenAll(tasks);
+    }
+
+    public int ClientCount
+    {
+        get { lock (_lock) return _clients.Count; }
     }
 }

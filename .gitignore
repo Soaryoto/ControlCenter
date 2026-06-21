@@ -1,7 +1,13 @@
-# Compiled source #
-*.com
+# Compiled source server #
 server/bin/*
 server/obj/*
+
+# Compiled source control center #
+*.com
+ControlCenter/bin/*
+ControlCenter/obj/*
+
+
 
 # Logs
 client/logs

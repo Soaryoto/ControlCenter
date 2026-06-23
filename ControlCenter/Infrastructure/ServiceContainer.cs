@@ -43,6 +43,19 @@ sealed class ServiceContainer
         _services[typeof(TInterface)] = instance;
     }
 
+    public void RegisterAlias<TNewInterface, TRegisteredInterface>()
+        where TNewInterface : class
+        where TRegisteredInterface : class
+    {
+        if (_isLocked)
+            throw new InvalidOperationException($"Ошибка в регистрации сервиса, контейнер был закрыт");
+            
+        if (!_services.TryGetValue(typeof(TRegisteredInterface), out var instance))
+            throw new InvalidOperationException($"Ошибка! В контейнере нед подходящего объекта");
+
+        _services[typeof(TNewInterface)] = instance;
+    }
+
     public T GetService<T>() where T : class
     {
         if (_services.TryGetValue(typeof(T), out var service))

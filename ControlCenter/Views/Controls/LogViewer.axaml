@@ -6,7 +6,7 @@
     x:Class="Soaryoto.Views.Controls.LogViewer"
     x:DataType="vm:LogViewerViewModel">
 
-    <ListBox ItemsSource="{Binding Logs.Entries}">
+    <ListBox ItemsSource="{Binding Logs}">
         <ListBox.ItemTemplate>
             <DataTemplate x:DataType="model:LogEntry">
                 <StackPanel Orientation="Horizontal" Spacing="8">

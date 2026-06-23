@@ -4,6 +4,7 @@ using Avalonia.Markup.Xaml;
 using Soaryoto.ViewModels;
 using Soaryoto.Views;
 using Soaryoto.Infrastructure;
+using Soaryoto.Interfaces.Services;
 
 namespace Soaryoto;
 
@@ -21,7 +22,12 @@ public partial class App : Application
         {
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainWindowViewModel(),
+                DataContext = new MainWindowViewModel(
+                    _applicationHost.Services.GetService<ILoggingService>(),
+                    _applicationHost.Services.GetService<ILoggingServiceReader>(),
+                    _applicationHost.Services.GetService<IWebSocketServerService>(),
+                    _applicationHost.Services.GetService<IMicrophoneListener>()
+                    ),
             };
         }
 

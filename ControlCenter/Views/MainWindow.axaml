@@ -21,17 +21,18 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         
-        <controls:LogViewer DataContext="{Binding ServerLog}"
+        <controls:LogViewer DataContext="{Binding LogsData}"
             Grid.Row="0" Grid.Column="0"/>
             
         <Button
             Grid.Row="0" Grid.Column="1"
-            Content="Добавить тестовый лог"
-            Command="{Binding AddTestLogCommand}" />   
+            Content="Запустить сервисы"
+            Command="{Binding StartServicesCommand}" />
 
-        <TextBlock Text="{Binding LogCounter}"
+        <Button
             Grid.Row="0" Grid.Column="2"
-            HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            Content="Отключить сервисы"
+            Command="{Binding StopServicesCommand}" />
             
     </Grid>
 

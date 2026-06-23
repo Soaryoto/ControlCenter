@@ -1,3 +1,6 @@
+using Soaryoto.Interfaces.Services;
+using Soaryoto.Services;
+
 namespace Soaryoto.Infrastructure;
 
 sealed class ApplicationHost
@@ -12,9 +15,11 @@ sealed class ApplicationHost
 
     private void InitServices()
     {
-        //_serviceContainer.RegisterSingleton<IWebSocketServer, WebSocketServer>();
-        //_serviceContainer.RegisterSingleton<IMicrophoneListener, MicrophoneListener>();
-        //_serviceContainer.RegisterSingleton<IButtonInterceptor, ButtonInterceptor>();
+        _services.RegisterSingleton<ILoggingService, LoggingService>();
+        _services.RegisterAlias<ILoggingServiceReader, ILoggingService>();
+        _services.RegisterSingleton<IWebSocketServerService, WebSocketServer>();
+        _services.RegisterSingleton<IMicrophoneListener, MicrophoneListener>();
+        //_services.RegisterSingleton<IButtonInterceptor, ButtonInterceptor>();
         _services.Build();
     }
 }

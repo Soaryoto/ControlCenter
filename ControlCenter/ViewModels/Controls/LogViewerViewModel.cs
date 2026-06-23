@@ -1,12 +1,15 @@
+using System.Collections.ObjectModel;
+using Soaryoto.Interfaces.Services;
 using Soaryoto.Models;
 
 namespace Soaryoto.ViewModels.Controls;
 
 public partial class LogViewerViewModel : ViewModelBase
 {
-    public LogModel Logs { get; }
-    public LogViewerViewModel(LogModel logs)
+    private ILoggingServiceReader _loggingServiceReader;
+    public ReadOnlyObservableCollection<LogEntry> Logs => _loggingServiceReader.GetLogs();
+    public LogViewerViewModel(ILoggingServiceReader loggingServiceReader)
     {
-        Logs = logs;
+        _loggingServiceReader = loggingServiceReader;
     }
 }

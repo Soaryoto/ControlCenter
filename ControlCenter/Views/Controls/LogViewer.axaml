@@ -6,18 +6,25 @@
     x:Class="Soaryoto.Views.Controls.LogViewer"
     x:DataType="vm:LogViewerViewModel">
 
-    <ListBox ItemsSource="{Binding Logs}">
+    <ListBox x:Name="LogListBox" ItemsSource="{Binding Logs}">
         <ListBox.ItemTemplate>
             <DataTemplate x:DataType="model:LogEntry">
-                <StackPanel Orientation="Horizontal" Spacing="8">
+                <Grid ColumnDefinitions="Auto,Auto,*"
+                    Margin="2">
 
-                    <TextBlock Text="{Binding Time}" />
+                    <TextBlock Text="{Binding TimeString}"
+                        Grid.Column="0"
+                        FontSize="12" TextWrapping="Wrap" FontFamily="Consolas"/>
 
-                    <TextBlock Text="{Binding Level}" />
+                    <TextBlock Text=")"
+                        Grid.Column="1"
+                        FontSize="12" TextWrapping="Wrap" FontFamily="Consolas"/>
 
-                    <TextBlock Text="{Binding Message}" />
+                    <TextBlock Text="{Binding Message}"
+                        Grid.Column="2"
+                        FontSize="12" TextWrapping="Wrap" FontFamily="Consolas"/>
 
-                </StackPanel>
+                </Grid>
             </DataTemplate>
         </ListBox.ItemTemplate>
     </ListBox>

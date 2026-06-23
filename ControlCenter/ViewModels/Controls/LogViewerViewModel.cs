@@ -6,10 +6,9 @@ namespace Soaryoto.ViewModels.Controls;
 
 public partial class LogViewerViewModel : ViewModelBase
 {
-    private ILoggingServiceReader _loggingServiceReader;
-    public ReadOnlyObservableCollection<LogEntry> Logs => _loggingServiceReader.GetLogs();
+    public ReadOnlyObservableCollection<LogEntry> Logs { get; }
     public LogViewerViewModel(ILoggingServiceReader loggingServiceReader)
     {
-        _loggingServiceReader = loggingServiceReader;
+        Logs = loggingServiceReader.GetLogs();
     }
 }

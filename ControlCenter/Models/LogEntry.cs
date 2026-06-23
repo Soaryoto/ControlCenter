@@ -13,6 +13,7 @@ public enum LogLevel
 public class LogEntry
 {
     public DateTime Time { get; init; }
+    public string TimeString => Time.ToString("HH:mm:ss");
 
     public LogLevel Level { get; init; }
 

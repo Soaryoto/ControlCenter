@@ -1,12 +1,10 @@
-﻿using System.Diagnostics;
-using System;
+﻿using System;
 using CommunityToolkit.Mvvm.Input;
-using ControlCenter.Models;
-using ControlCenter.ViewModels.Controls;
-using System.IO;
+using Soaryoto.Models;
+using Soaryoto.ViewModels.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace ControlCenter.ViewModels;
+namespace Soaryoto.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {

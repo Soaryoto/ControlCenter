@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace ControlCenter.Views.Controls;
+namespace Soaryoto.Views.Controls;
 
 public partial class LogViewer : UserControl
 {

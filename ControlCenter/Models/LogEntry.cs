@@ -1,6 +1,6 @@
 using System;
 
-namespace ControlCenter.Models;
+namespace Soaryoto.Models;
 
 public enum LogLevel
 {

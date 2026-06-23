@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using System;
 
-namespace ControlCenter;
+namespace Soaryoto;
 
 sealed class Program
 {
@@ -11,9 +11,6 @@ sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
-#if DEBUG
-        Console.WriteLine("Running in DEBUG mode");
-#endif
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
     } 

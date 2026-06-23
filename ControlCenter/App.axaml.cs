@@ -1,16 +1,15 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
-using Avalonia.Data.Core.Plugins;
-using System.Linq;
 using Avalonia.Markup.Xaml;
-using ControlCenter.ViewModels;
-using ControlCenter.Views;
+using Soaryoto.ViewModels;
+using Soaryoto.Views;
+using Soaryoto.Infrastructure;
 
-namespace ControlCenter;
+namespace Soaryoto;
 
 public partial class App : Application
 {
+    private readonly ApplicationHost _applicationHost = new ();
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);

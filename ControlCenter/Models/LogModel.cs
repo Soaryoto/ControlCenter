@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 
-namespace ControlCenter.Models;
+namespace Soaryoto.Models;
 
 public class LogModel
 {

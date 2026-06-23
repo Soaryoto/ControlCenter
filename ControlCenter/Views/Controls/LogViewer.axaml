@@ -1,9 +1,9 @@
 <UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:vm="using:ControlCenter.ViewModels.Controls"
-    xmlns:model="using:ControlCenter.Models"
-    x:Class="ControlCenter.Views.Controls.LogViewer"
+    xmlns:vm="using:Soaryoto.ViewModels.Controls"
+    xmlns:model="using:Soaryoto.Models"
+    x:Class="Soaryoto.Views.Controls.LogViewer"
     x:DataType="vm:LogViewerViewModel">
 
     <ListBox ItemsSource="{Binding Logs.Entries}">

@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace ControlCenter.Views;
+namespace Soaryoto.Views;
 
 public partial class MainWindow : Window
 {

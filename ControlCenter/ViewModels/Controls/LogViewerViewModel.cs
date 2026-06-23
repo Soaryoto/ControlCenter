@@ -1,8 +1,6 @@
-using System;
-using System.IO;
-using ControlCenter.Models;
+using Soaryoto.Models;
 
-namespace ControlCenter.ViewModels.Controls;
+namespace Soaryoto.ViewModels.Controls;
 
 public partial class LogViewerViewModel : ViewModelBase
 {

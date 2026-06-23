@@ -1,3 +1,3 @@
 cd server
-dotnet run .\Program.cs
+dotnet run -p:DefineConstants=CONSOLE_APP
 pause

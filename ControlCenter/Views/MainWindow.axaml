@@ -3,6 +3,9 @@
         xmlns:vm="using:ControlCenter.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        
+        xmlns:controls="using:ControlCenter.Views.Controls"
+
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="ControlCenter.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -13,6 +16,25 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <controls:LogViewer DataContext="{Binding ServerLog}"
+            Grid.Row="0" Grid.Column="0"/>
+            
+        <Button
+            Grid.Row="0" Grid.Column="1"
+            Content="Добавить тестовый лог"
+            Command="{Binding AddTestLogCommand}" />   
+
+        <TextBlock Text="{Binding LogCounter}"
+            Grid.Row="0" Grid.Column="2"
+            HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            
+    </Grid>
 
 </Window>

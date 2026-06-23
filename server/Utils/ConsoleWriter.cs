@@ -6,11 +6,13 @@ public class ConsoleWriter
 
     public static void WriteLine(string message, ConsoleColor color = ConsoleColor.White)
     {
+#if CONSOLE_APP
         lock (_lock)
         {
             Console.ForegroundColor = color;
             Console.WriteLine(message);
             Console.ResetColor();
         }
+#endif
     }
 }

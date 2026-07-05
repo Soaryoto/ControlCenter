@@ -11,6 +11,7 @@ import CupOfCoffee from "./components/CupOfCoffee";
 import SteamFromCup from "./components/SteamFromCup";
 import EyeComponent from "./components/EyeComponent";
 import CapComponent from "./components/CapComponent";
+import PistolWithSilencer from "./components/PistolWithSilencer";
 
 
 function App() {
@@ -35,9 +36,9 @@ function App() {
       <div className="app-container">
         <Avatar isTalking={isTalking} />
         <EyeComponent />
+        {/* <PistolWithSilencer /> */}
         <CupOfCoffee />
         <SteamFromCup />
-        <CapComponent />
       </div>
     );
 }

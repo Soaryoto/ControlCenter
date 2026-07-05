@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Specialized;
-using System.IO;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using Soaryoto.ViewModels.Controls;
@@ -36,10 +35,8 @@ public partial class LogViewer : UserControl
     {
         Dispatcher.UIThread.Post(() =>
         {
-            File.AppendAllText("debug.txt", $"Items: {LogListBox.ItemCount}\n");
             if (LogListBox.ItemCount > 0)
             {
-                File.AppendAllText("debug.txt", $"Items: {LogListBox.ItemCount}\n");
                 LogListBox.ScrollIntoView(LogListBox.ItemCount - 1);
             }
         });

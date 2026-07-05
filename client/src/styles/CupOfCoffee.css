@@ -1,7 +1,9 @@
 .cup-of-coffee-container {
     position: absolute;
-    top: 888px;
-    left: 160px;
+    
+    top: /*988px;*/ 888px;
+    left: /*360px;*/  160px;
+
     width: 350px;
     height: 350px;
 }

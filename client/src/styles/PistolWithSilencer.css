@@ -1,0 +1,8 @@
+.pistol-with-silencer {
+    position: absolute;
+    top: 1088px;
+    left: 160px;
+    width: 400px;
+    height: 344px;
+    transform: rotate(-10deg);
+}

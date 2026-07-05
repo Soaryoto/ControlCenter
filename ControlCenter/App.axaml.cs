@@ -26,11 +26,20 @@ public partial class App : Application
                     _applicationHost.Services.GetService<ILoggingService>(),
                     _applicationHost.Services.GetService<ILoggingServiceReader>(),
                     _applicationHost.Services.GetService<IWebSocketServerService>(),
-                    _applicationHost.Services.GetService<IMicrophoneListener>()
+                    _applicationHost.Services.GetService<IMicrophoneListener>(),
+                    _applicationHost.Services.GetService<IProcessManagerService>()
                     ),
             };
+
+            desktop.Exit += DesctopExit;
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private void DesctopExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
+    {
+        IProcessManagerService processManagerService = _applicationHost.Services.GetService<IProcessManagerService>();
+        processManagerService.StopAllProcess();
     }
 }

@@ -29,10 +29,21 @@
             Content="Запустить сервисы"
             Command="{Binding StartServicesCommand}" />
 
-        <Button
-            Grid.Row="0" Grid.Column="2"
-            Content="Отключить сервисы"
-            Command="{Binding StopServicesCommand}" />
+        <Grid Grid.Row="0" Grid.Column="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button
+                Grid.Row="0" Grid.Column="0"
+                Content="Отключить сервисы"
+                Command="{Binding StopServicesCommand}" />
+            <Button
+                Grid.Row="0" Grid.Column="1"
+                Content="Отключить React"
+                Command="{Binding StopReactCommand}" />
+
+        </Grid>
             
     </Grid>
 

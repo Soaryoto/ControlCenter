@@ -1,8 +1,8 @@
 .steam-container {
   position: absolute;
   
-  left: 290px;
-  top: 808px;
+  top: /*908px;*/ 808px;
+  left: /*490px;*/ 290px;
   
   width: 100px;
   height: 200px;

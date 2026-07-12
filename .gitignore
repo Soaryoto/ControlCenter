@@ -1,3 +1,6 @@
+# VSCode directories
+.vscode/*
+
 # Compiled source server #
 server/bin/*
 server/obj/*
@@ -7,9 +10,9 @@ server/obj/*
 ControlCenter/bin/*
 ControlCenter/obj/*
 
-
-
 # Logs
+ControlCenter/logs
+
 client/logs
 client/*.log
 client/npm-debug.log*

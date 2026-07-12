@@ -7,8 +7,50 @@ namespace Soaryoto.Infrastructure;
 sealed class ServiceContainer
 {
     private bool _isLocked = false;
-    private readonly Dictionary<Type, object> _services = new();
+    private readonly ServiceStore _serviceStore = new();
+    public void RegisterSingleton<TClass>() where TClass : class
+    {
+        if (_isLocked)
+            throw new InvalidOperationException($"Ошибка в регистрации сервиса, контейнер был закрыт");
 
+        _serviceStore.RegisterSingleton<TClass>();
+    }
+
+    public void RegisterSingleton<TInterface, TClass>() where TClass : class where TInterface : class
+    {
+        if (_isLocked)
+            throw new InvalidOperationException($"Ошибка в регистрации сервиса, контейнер был закрыт");
+
+        _serviceStore.RegisterSingleton<TInterface, TClass>();
+    }
+
+    public void RegisterAlias<TInterface, TRegisteredClass>() where TInterface : class where TRegisteredClass : class
+    {
+        if (_isLocked)
+            throw new InvalidOperationException($"Ошибка в регистрации сервиса, контейнер был закрыт");
+        
+        _serviceStore.RegisterAlias<TInterface, TRegisteredClass>();
+    }
+
+    public TInterface GetService<TInterface>() where TInterface : class => _serviceStore.GetService<TInterface>();
+
+    public IEnumerable<TInterface> GetServices<TInterface>() where TInterface : class => _serviceStore.GetServices<TInterface>();
+
+    public void Build()
+    {
+        _isLocked = true;
+    }
+}
+
+sealed class ServiceStore
+{
+    private readonly Dictionary<Type, object> _services = new();
+    private readonly Dictionary<Type, List<Type>> _aliases = new();
+
+    private bool CheckContainService(Type type)
+    {
+        return _services.ContainsKey(type);
+    }
     private object CreateInstance(Type implementationType)
     {
         var constructor = implementationType.GetConstructors()
@@ -24,49 +66,82 @@ sealed class ServiceContainer
 
     private object ResolveDependency(Type type)
     {
-        if (_services.TryGetValue(type, out var existing))
-            return existing;
+        if(_aliases.TryGetValue(type, out var implementationTypes))
+        {
+            if(implementationTypes.Count > 0)
+            {
+                var implementationType = implementationTypes.First();
+                if(_services.TryGetValue(implementationType, out var service))
+                {
+                    return service;
+                }
+            }
+        }
 
         throw new InvalidOperationException(
             $"[SC] Не удалось создать сервис: зависимость {type.Name} не зарегистрирована. " +
             $"Зарегистрируй её ДО сервиса, который от неё зависит.");
     }
 
-    public void RegisterSingleton<TInterface, TImplementation>()
+    public void RegisterSingleton<TClass>()
+        where TClass : class
+    {
+        _services[typeof(TClass)] = CreateInstance(typeof(TClass));
+    }
+    public void RegisterSingleton<TInterface, TClass>()
+        where TClass : class
         where TInterface : class
-        where TImplementation : class, TInterface
     {
-        if (_isLocked)
-            throw new InvalidOperationException($"Ошибка в регистрации сервиса, контейнер был закрыт");
-            
-        object instance = CreateInstance(typeof(TImplementation));
-        _services[typeof(TInterface)] = instance;
+        RegisterSingleton<TClass>();
+        RegisterAlias<TInterface, TClass>();
     }
-
-    public void RegisterAlias<TNewInterface, TRegisteredInterface>()
-        where TNewInterface : class
-        where TRegisteredInterface : class
+    public void RegisterAlias<TInterface, TRegisteredClass>()
+        where TInterface : class
+        where TRegisteredClass : class
     {
-        if (_isLocked)
-            throw new InvalidOperationException($"Ошибка в регистрации сервиса, контейнер был закрыт");
-            
-        if (!_services.TryGetValue(typeof(TRegisteredInterface), out var instance))
-            throw new InvalidOperationException($"Ошибка! В контейнере нед подходящего объекта");
+        if(!CheckContainService(typeof(TRegisteredClass)))
+            throw new InvalidOperationException($"[SC] Сервис {typeof(TRegisteredClass).Name} не зарегистрирован.");
 
-        _services[typeof(TNewInterface)] = instance;
-    }
-
-    public T GetService<T>() where T : class
-    {
-        if (_services.TryGetValue(typeof(T), out var service))
+        if(_aliases.TryGetValue(typeof(TInterface), out var implementationTypes))
         {
-            return (T)service;
+            implementationTypes.Add(typeof(TRegisteredClass));
         }
-        throw new InvalidOperationException($"[SC] Сервис {typeof(T).Name} не зарегистрирован.");
+        else
+        {
+            _aliases[typeof(TInterface)] = new List<Type> { typeof(TRegisteredClass) };
+        }
     }
 
-    public void Build()
+    public TInterface GetService<TInterface>() where TInterface : class
     {
-        _isLocked = true;
+        if(_aliases.TryGetValue(typeof(TInterface), out var implementationTypes))
+        {
+            if(implementationTypes.Count > 0)
+            {
+                var implementationType = implementationTypes.First();
+                if(_services.TryGetValue(implementationType, out var service))
+                {
+                    return (TInterface)service;
+                }
+            }
+        }
+        throw new InvalidOperationException($"[SC] Сервис {typeof(TInterface).Name} не зарегистрирован.");
+    }
+
+    public IEnumerable<TInterface> GetServices<TInterface>() where TInterface : class 
+    {
+        if(_aliases.TryGetValue(typeof(TInterface), out var implementationTypes))
+        {
+            List<TInterface> servicesList = new List<TInterface>();
+            foreach(var implementationType in implementationTypes)
+            {
+                if(_services.TryGetValue(implementationType, out var service))
+                {
+                    servicesList.Add((TInterface)service);
+                }
+            }
+            return servicesList;
+        }
+        throw new InvalidOperationException($"[SC] Сервис {typeof(TInterface).Name} не зарегистрирован.");
     }
 }

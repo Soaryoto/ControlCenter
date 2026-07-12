@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using Avalonia.Threading;
 using Soaryoto.Interfaces.Services;
 using Soaryoto.Models;
 
@@ -8,12 +9,18 @@ namespace Soaryoto.Services;
 
 public sealed class LoggingService : ILoggingService, ILoggingServiceReader
 {
-    private static readonly string LogFilePath = "logs/log{0}.log";
-    private static readonly string LogFormat = "[{0}] [{1}] {2}\n";
+    private readonly object _fileLock = new();
+    private static readonly string _logPath = "logs";
+    private static readonly string _logFilePath = "{0}/log{1}.log";
+    private static readonly string _logFormat = "[{0}] [{1}] {2}\n";
 
     private ObservableCollection<LogEntry> _entries { get; } = new ();
+    private readonly ReadOnlyObservableCollection<LogEntry> _readOnlyEntries;
 
-    public LoggingService() { }
+    public LoggingService()
+    {
+        _readOnlyEntries = new ReadOnlyObservableCollection<LogEntry>(_entries);
+    }
 
     public void WriteLine(string message, LogLevel logLevel = LogLevel.Info)
     {
@@ -23,12 +30,25 @@ public sealed class LoggingService : ILoggingService, ILoggingServiceReader
             Level = logLevel,
             Message = message
         };
-        File.AppendAllText(string.Format(LogFilePath, DateTime.Now.ToString("yyyy-MM-dd")), string.Format(LogFormat, newEntry.Time, newEntry.Level, newEntry.Message));
-        _entries.Add(newEntry);
+        lock (_fileLock) WriteInFile(newEntry);
+        
+        Dispatcher.UIThread.Post(() =>
+        {
+            _entries.Add(newEntry);
+        });
+    }
+
+    private void WriteInFile(LogEntry entry)
+    {
+        if (!Directory.Exists(_logPath))
+        {
+            Directory.CreateDirectory(_logPath);
+        }
+        File.AppendAllText(string.Format(_logFilePath, _logPath, DateTime.Now.ToString("yyyy-MM-dd")), string.Format(_logFormat, entry.Time, entry.Level, entry.Message));
     }
 
     public ReadOnlyObservableCollection<LogEntry> GetLogs()
     {
-        return new ReadOnlyObservableCollection<LogEntry>(_entries);
+        return _readOnlyEntries;
     }
 }

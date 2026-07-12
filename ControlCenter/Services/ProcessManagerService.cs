@@ -14,8 +14,48 @@ public sealed class ProcessManagerService : IProcessManagerService
     private bool _isLocked = false;
     private ObservableCollection<ManagedProcess> _processes { get; } = new ();
     private readonly ILoggingService _loggingService;
-
     private static readonly Regex AnsiRegex = new(@"\x1B\[[0-9;]*[A-Za-z]");
+
+    private Process CreateProcess(ManagedProcess processStartInfo)
+    {
+        Process newProcess = new Process();
+
+        newProcess.StartInfo.FileName = processStartInfo.Executable;
+        newProcess.StartInfo.Arguments = processStartInfo.Arguments;
+        newProcess.StartInfo.WorkingDirectory = processStartInfo.WorkingDirectory;
+
+        newProcess.StartInfo.UseShellExecute = false;
+        newProcess.StartInfo.CreateNoWindow = true;
+        newProcess.StartInfo.RedirectStandardOutput = true;
+        newProcess.StartInfo.RedirectStandardError = true;
+        newProcess.EnableRaisingEvents = true;
+
+        newProcess.StartInfo.StandardOutputEncoding = Encoding.UTF8;
+        newProcess.StartInfo.StandardErrorEncoding = Encoding.UTF8;
+
+        newProcess.OutputDataReceived += OutputReceived;
+        newProcess.ErrorDataReceived += ErrorReceived;
+
+        return newProcess;
+    }
+    private void OutputReceived(object sender, DataReceivedEventArgs e)
+    {
+        if (e.Data != null)
+        {
+            string cleanText = AnsiRegex.Replace(e.Data, "");
+            _loggingService.WriteLine(cleanText, LogLevel.Info);
+        }
+    }
+
+    private void ErrorReceived(object sender, DataReceivedEventArgs e)
+    {
+        if (e.Data != null)
+        {
+            string cleanText = AnsiRegex.Replace(e.Data, "");
+            _loggingService.WriteLine(cleanText, LogLevel.Error);   
+        }
+    }
+
     public ProcessManagerService(ILoggingService loggingService)
     {
         _loggingService = loggingService;
@@ -111,45 +151,5 @@ public sealed class ProcessManagerService : IProcessManagerService
             throw new InvalidOperationException($"Ошибка, процесс или процессы были пусты");
         if (managedProcess.ProcessTypeName != processTypeName)
             throw new InvalidOperationException($"Небыл найден нужный тип процесса");
-    }
-
-    private Process CreateProcess(ManagedProcess processStartInfo)
-    {
-        Process newProcess = new Process();
-
-        newProcess.StartInfo.FileName = processStartInfo.Executable;
-        newProcess.StartInfo.Arguments = processStartInfo.Arguments;
-        newProcess.StartInfo.WorkingDirectory = processStartInfo.WorkingDirectory;
-
-        newProcess.StartInfo.UseShellExecute = false;
-        newProcess.StartInfo.CreateNoWindow = true;
-        newProcess.StartInfo.RedirectStandardOutput = true;
-        newProcess.StartInfo.RedirectStandardError = true;
-        newProcess.EnableRaisingEvents = true;
-
-        newProcess.StartInfo.StandardOutputEncoding = Encoding.UTF8;
-        newProcess.StartInfo.StandardErrorEncoding = Encoding.UTF8;
-
-        newProcess.OutputDataReceived += OutputReceived;
-        newProcess.ErrorDataReceived += ErrorReceived;
-
-        return newProcess;
-    }
-    private void OutputReceived(object sender, DataReceivedEventArgs e)
-    {
-        if (e.Data != null)
-        {
-            string cleanText = AnsiRegex.Replace(e.Data, "");
-            _loggingService.WriteLine(cleanText, LogLevel.Info);
-        }
-    }
-
-    private void ErrorReceived(object sender, DataReceivedEventArgs e)
-    {
-        if (e.Data != null)
-        {
-            string cleanText = AnsiRegex.Replace(e.Data, "");
-            _loggingService.WriteLine(cleanText, LogLevel.Error);   
-        }
     }
 }

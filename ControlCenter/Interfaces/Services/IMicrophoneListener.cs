@@ -1,6 +1,6 @@
 namespace Soaryoto.Interfaces.Services;
 
-public interface IMicrophoneListener : ILaunchedService
+public interface IMicrophoneListener : IControllableService
 {
     
 }

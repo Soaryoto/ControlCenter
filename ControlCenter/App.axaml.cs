@@ -25,8 +25,7 @@ public partial class App : Application
                 DataContext = new MainWindowViewModel(
                     _applicationHost.Services.GetService<ILoggingService>(),
                     _applicationHost.Services.GetService<ILoggingServiceReader>(),
-                    _applicationHost.Services.GetService<IWebSocketServerService>(),
-                    _applicationHost.Services.GetService<IMicrophoneListener>(),
+                    _applicationHost.ManagerControllableService,
                     _applicationHost.Services.GetService<IProcessManagerService>()
                     ),
             };

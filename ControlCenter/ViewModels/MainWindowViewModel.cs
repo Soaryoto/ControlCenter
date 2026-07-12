@@ -2,28 +2,26 @@
 using Soaryoto.Interfaces.Services;
 using Soaryoto.ViewModels.Controls;
 using Soaryoto.Models;
+using Soaryoto.Infrastructure;
 
 namespace Soaryoto.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
     private ILoggingService _loggingService;
-    private IWebSocketServerService _webSocketServerService;
-    private IMicrophoneListener _microphoneListener;
+    private ManagerControllableService _managerControllableService;
     private IProcessManagerService _processManagerService;
     public LogViewerViewModel LogsData { get; }
     public MainWindowViewModel(
         ILoggingService loggingService,
         ILoggingServiceReader loggingServiceReader,
-        IWebSocketServerService webSocketServerService,
-        IMicrophoneListener microphoneListener,
+        ManagerControllableService managerControllableService,
         IProcessManagerService processManagerService
         )
     {
         _loggingService = loggingService;
         LogsData = new LogViewerViewModel(loggingServiceReader);
-        _webSocketServerService = webSocketServerService;
-        _microphoneListener = microphoneListener;
+        _managerControllableService = managerControllableService;
         _processManagerService = processManagerService;
     }
 
@@ -31,8 +29,8 @@ public partial class MainWindowViewModel : ViewModelBase
     private void StartServices()
     {
         _loggingService.WriteLine("Начало включение сервисов");
-        _webSocketServerService.StartService();
-        _microphoneListener.StartService();
+        _managerControllableService.StartService(ServicesName.WebSocketServer);
+        _managerControllableService.StartService(ServicesName.MicrophoneListener);
         _processManagerService.StartProcess(ProcessTypeName.ReactAvatar);
     }
 
@@ -40,8 +38,8 @@ public partial class MainWindowViewModel : ViewModelBase
     private void StopServices()
     {
         _loggingService.WriteLine("Выключение сервисов");
-        _webSocketServerService.StopService();
-        _microphoneListener.StopService();
+        _managerControllableService.StartService(ServicesName.WebSocketServer);
+        _managerControllableService.StartService(ServicesName.MicrophoneListener);
         _processManagerService.StopProcess(ProcessTypeName.ReactAvatar);
     }
     

@@ -21,26 +21,22 @@ public sealed class WebSocketServer : IWebSocketServerService
     private readonly object _lock = new();
     private CancellationTokenSource _cts = new();
 
-    public WebSocketServer(ILoggingService loggingService)
-    {
-        _loggingService = loggingService;
-        _listener = new HttpListener();
-        _listener.Prefixes.Add($"http://localhost:{this._port}/");
-    }
+    public ServicesName Name => ServicesName.WebSocketServer;
+    public ServicesState State { get; private set; } = ServicesState.Stopped;
 
-    public void StartService()
+    private void Start()
     {
         _cts = new CancellationTokenSource();
         Task.Run(() => StartAsync(_cts.Token));
     }
 
-    public void StopService()
+    private void Stop()
     {
         _cts.Cancel();
         StopAsync().GetAwaiter().GetResult();
     }
 
-    public async Task StartAsync(CancellationToken ct)
+    private async Task StartAsync(CancellationToken ct)
     {
         _listener.Start();
         _loggingService.WriteLine($"[WS] Сервер запущен на ws://localhost:{_port}", LogLevel.Info);
@@ -69,7 +65,7 @@ public sealed class WebSocketServer : IWebSocketServerService
         }
     }
 
-    public async Task StopAsync()
+    private async Task StopAsync()
     {
         _listener.Stop();
         List<WebSocket> snapshot;
@@ -118,14 +114,6 @@ public sealed class WebSocketServer : IWebSocketServerService
         }
     }
 
-    public void Broadcast(WebSocketMessage webSocketMessage)
-    {
-        _ = BroadcastAsync(webSocketMessage.ToJson()).ContinueWith(t =>
-        {
-            if (t.Exception != null)
-                _loggingService.WriteLine($"[WS] Ошибка при broadcast: {t.Exception.InnerException?.Message}", LogLevel.Error);
-        }, TaskContinuationOptions.OnlyOnFaulted);
-    }
 
     private async Task BroadcastAsync(string json)
     {
@@ -140,6 +128,36 @@ public sealed class WebSocketServer : IWebSocketServerService
             .Select(ws => ws.SendAsync(segment, WebSocketMessageType.Text, true, CancellationToken.None));
 
         await Task.WhenAll(tasks);
+    }
+
+    public WebSocketServer(ILoggingService loggingService)
+    {
+        _loggingService = loggingService;
+        _listener = new HttpListener();
+        _listener.Prefixes.Add($"http://localhost:{this._port}/");
+    }
+
+    public void Toggle()
+    {
+        if (State == ServicesState.Stopped)
+        {
+            Start();
+            State = ServicesState.Started;
+        }
+        else
+        {
+            Stop();
+            State = ServicesState.Stopped;
+        }
+    }
+
+    public void Broadcast(WebSocketMessage webSocketMessage)
+    {
+        _ = BroadcastAsync(webSocketMessage.ToJson()).ContinueWith(t =>
+        {
+            if (t.Exception != null)
+                _loggingService.WriteLine($"[WS] Ошибка при broadcast: {t.Exception.InnerException?.Message}", LogLevel.Error);
+        }, TaskContinuationOptions.OnlyOnFaulted);
     }
 
     public int ClientCount

@@ -15,11 +15,10 @@ public sealed class MicrophoneListener : IMicrophoneListener
     private int lastLoudTime = 0;
     private int _silenceThreshold = 300; // Время в миллисекундах, после которого считается, что пользователь перестал говорить
     private bool _isTalking = false;
-    public MicrophoneListener(ILoggingService loggingService, IWebSocketServerService webSocketServerService)
-    {
-        _loggingService = loggingService;
-        _webSocketServerService = webSocketServerService;
-    }
+    
+    public ServicesName Name => ServicesName.MicrophoneListener;
+    public ServicesState State { get; private set; } = ServicesState.Stopped;
+
     private void StartListening()
     {
         _loggingService.WriteLine("[MIC] Начало прослушивания микрофона...", LogLevel.Info);
@@ -100,12 +99,23 @@ public sealed class MicrophoneListener : IMicrophoneListener
         _webSocketServerService.Broadcast(message);
     }
 
-    public void StartService()
+    public MicrophoneListener(ILoggingService loggingService, IWebSocketServerService webSocketServerService)
     {
-        StartListening();
+        _loggingService = loggingService;
+        _webSocketServerService = webSocketServerService;
     }
-    public void StopService()
+
+    public void Toggle()
     {
-        StopListening();
+        if (State == ServicesState.Stopped)
+        {
+            StartListening();
+            State = ServicesState.Started;
+        }
+        else
+        {
+            StopListening();
+            State = ServicesState.Stopped;
+        }
     }
 }

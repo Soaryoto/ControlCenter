@@ -24,26 +24,30 @@
         <controls:LogViewer DataContext="{Binding LogsData}"
             Grid.Row="0" Grid.Column="0"/>
             
-        <Button
-            Grid.Row="0" Grid.Column="1"
-            Content="Запустить сервисы"
-            Command="{Binding StartServicesCommand}" />
 
-        <Grid Grid.Row="0" Grid.Column="2">
+        <Grid Grid.Row="0" Grid.Column="1">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button
                 Grid.Row="0" Grid.Column="0"
+                Content="Запустить сервисы"
+                Command="{Binding StartServicesCommand}" />
+            <Button
+                Grid.Row="0" Grid.Column="1"
                 Content="Отключить сервисы"
                 Command="{Binding StopServicesCommand}" />
             <Button
-                Grid.Row="0" Grid.Column="1"
+                Grid.Row="0" Grid.Column="2"
                 Content="Отключить React"
                 Command="{Binding StopReactCommand}" />
 
         </Grid>
+        
+        <controls:ServiceSwitcher DataContext="{Binding ServiceSwitcherData}"
+            Grid.Row="0" Grid.Column="2"/>
             
     </Grid>
 

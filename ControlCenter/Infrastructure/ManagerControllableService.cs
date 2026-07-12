@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Soaryoto.Interfaces.Services;
 using Soaryoto.Models;
 
@@ -7,7 +8,13 @@ namespace Soaryoto.Infrastructure;
 public sealed class ManagerControllableService
 {
     private readonly IEnumerable<IControllableService> _services;
-    public IEnumerable<IControllableService> Services => _services;
+    public IReadOnlyList<IControllableService> Services
+    {
+        get
+        {
+            return _services.ToList();
+        }
+    }
 
     public ManagerControllableService(IEnumerable<IControllableService> services)
     {

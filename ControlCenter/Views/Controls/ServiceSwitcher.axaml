@@ -1,0 +1,32 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:Soaryoto.ViewModels.Controls"
+    xmlns:model="using:Soaryoto.ViewModels.Items"
+    x:Class="Soaryoto.Views.Controls.ServiceSwitcher"
+    x:DataType="vm:ServiceSwitcherViewModel">
+
+    <ListBox x:Name="ServicesListBox" ItemsSource="{Binding ServicesItems}">
+        <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="model:ServiceItemViewModel">
+                <Grid ColumnDefinitions="Auto,Auto,*"
+                    Margin="2">
+
+                    <TextBlock Text="{Binding Name}"
+                        Grid.Column="0"
+                        FontSize="12" TextWrapping="Wrap" FontFamily="Consolas"/>
+
+                    <TextBlock Text=")"
+                        Grid.Column="1"
+                        FontSize="12" TextWrapping="Wrap" FontFamily="Consolas"/>
+
+                    <TextBlock Text="{Binding State}"
+                        Grid.Column="2"
+                        FontSize="12" TextWrapping="Wrap" FontFamily="Consolas"/>
+
+                </Grid>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
+
+</UserControl>

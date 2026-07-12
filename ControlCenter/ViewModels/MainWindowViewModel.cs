@@ -12,6 +12,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private ManagerControllableService _managerControllableService;
     private IProcessManagerService _processManagerService;
     public LogViewerViewModel LogsData { get; }
+    public ServiceSwitcherViewModel ServiceSwitcherData { get; }
     public MainWindowViewModel(
         ILoggingService loggingService,
         ILoggingServiceReader loggingServiceReader,
@@ -20,9 +21,10 @@ public partial class MainWindowViewModel : ViewModelBase
         )
     {
         _loggingService = loggingService;
+        _processManagerService = processManagerService;
         LogsData = new LogViewerViewModel(loggingServiceReader);
         _managerControllableService = managerControllableService;
-        _processManagerService = processManagerService;
+        ServiceSwitcherData = new ServiceSwitcherViewModel(managerControllableService);
     }
 
     [RelayCommand]

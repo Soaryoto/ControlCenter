@@ -4,8 +4,8 @@ using Soaryoto.Contracts.Messages;
 using Soaryoto.Interfaces.Services;
 using Soaryoto.Models;
 
-namespace Soaryoto;
-public sealed class MicrophoneListener : IMicrophoneListener
+namespace Soaryoto.Services;
+public sealed class MicrophoneListener : BaseControllableService, IMicrophoneListener
 {
     private readonly ILoggingService _loggingService;
     private readonly IWebSocketServerService _webSocketServerService;
@@ -15,9 +15,6 @@ public sealed class MicrophoneListener : IMicrophoneListener
     private int lastLoudTime = 0;
     private int _silenceThreshold = 300; // Время в миллисекундах, после которого считается, что пользователь перестал говорить
     private bool _isTalking = false;
-    
-    public ServicesName Name => ServicesName.MicrophoneListener;
-    public ServicesState State { get; private set; } = ServicesState.Stopped;
 
     private void StartListening()
     {
@@ -101,6 +98,7 @@ public sealed class MicrophoneListener : IMicrophoneListener
 
     public MicrophoneListener(ILoggingService loggingService, IWebSocketServerService webSocketServerService)
     {
+        Name = ServicesName.MicrophoneListener;
         _loggingService = loggingService;
         _webSocketServerService = webSocketServerService;
     }

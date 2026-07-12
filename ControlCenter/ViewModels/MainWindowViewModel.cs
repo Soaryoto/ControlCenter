@@ -26,28 +26,4 @@ public partial class MainWindowViewModel : ViewModelBase
         _managerControllableService = managerControllableService;
         ServiceSwitcherData = new ServiceSwitcherViewModel(managerControllableService);
     }
-
-    [RelayCommand]
-    private void StartServices()
-    {
-        _loggingService.WriteLine("Начало включение сервисов");
-        _managerControllableService.StartService(ServicesName.WebSocketServer);
-        _managerControllableService.StartService(ServicesName.MicrophoneListener);
-        _processManagerService.StartProcess(ProcessTypeName.ReactAvatar);
-    }
-
-    [RelayCommand]
-    private void StopServices()
-    {
-        _loggingService.WriteLine("Выключение сервисов");
-        _managerControllableService.StartService(ServicesName.WebSocketServer);
-        _managerControllableService.StartService(ServicesName.MicrophoneListener);
-        _processManagerService.StopProcess(ProcessTypeName.ReactAvatar);
-    }
-    
-    [RelayCommand]
-    private void StopReact()
-    {
-        _processManagerService.StopProcess(ProcessTypeName.ReactAvatar);
-    }
 }

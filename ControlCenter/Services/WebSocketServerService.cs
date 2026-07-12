@@ -10,9 +10,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Soaryoto.Models;
 
-namespace Soaryoto;
+namespace Soaryoto.Services;
 
-public sealed class WebSocketServer : IWebSocketServerService
+public sealed class WebSocketServer : BaseControllableService, IWebSocketServerService
 {
     private readonly ILoggingService _loggingService;
     private readonly int _port = 8765;
@@ -20,10 +20,6 @@ public sealed class WebSocketServer : IWebSocketServerService
     private readonly List<WebSocket> _clients = new();
     private readonly object _lock = new();
     private CancellationTokenSource _cts = new();
-
-    public ServicesName Name => ServicesName.WebSocketServer;
-    public ServicesState State { get; private set; } = ServicesState.Stopped;
-
     private void Start()
     {
         _cts = new CancellationTokenSource();
@@ -132,6 +128,7 @@ public sealed class WebSocketServer : IWebSocketServerService
 
     public WebSocketServer(ILoggingService loggingService)
     {
+        Name = ServicesName.WebSocketServer;
         _loggingService = loggingService;
         _listener = new HttpListener();
         _listener.Prefixes.Add($"http://localhost:{this._port}/");

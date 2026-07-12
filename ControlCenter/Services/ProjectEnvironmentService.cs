@@ -10,10 +10,12 @@ public sealed class ProjectEnvironmentService : IProjectEnvironmentService
     private readonly string _rootSettingsDirName = ".soaryoto";
     public string ProjectRootPath { get; private set; } = string.Empty;
     public string LogsPath { get; private set; } = string.Empty;
+    public string ReactPath { get; private set; } = string.Empty;
     public ProjectEnvironmentService()
     {
         ProjectRootPath = FindPath(_rootSettingsDirName);
         LogsPath = CheckPathExists(Path.Combine(ProjectRootPath, _rootSettingsDirName, "logs"));
+        ReactPath = Path.Combine(ProjectRootPath, "client");
     }
 
     private string CheckPathExists(string path)

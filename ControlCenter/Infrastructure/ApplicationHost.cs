@@ -1,5 +1,4 @@
 using Soaryoto.Interfaces.Services;
-using Soaryoto.Models;
 using Soaryoto.Services;
 
 namespace Soaryoto.Infrastructure;
@@ -37,19 +36,14 @@ sealed class ApplicationHost
         _services.RegisterAlias<IControllableService, MicrophoneListener>();
 
         _services.RegisterSingleton<IProcessManagerService, ProcessManagerService>();
+
+        _services.RegisterSingleton<IReactService, ReactService>();
+        _services.RegisterAlias<IControllableService, ReactService>();
     }
 
     private void InitProcesses()
     {
         IProcessManagerService processManagerService = _services.GetService<IProcessManagerService>();
-        processManagerService.AddProcessInfo(new ManagedProcess()
-        {
-            Name = "ReactAvatar",
-            ProcessTypeName = ProcessTypeName.ReactAvatar,
-            Executable = "cmd.exe",
-            Arguments = "/C npm run dev",
-            WorkingDirectory = @"D:\Projects\Streaming\Soaryoto\client"
-        });
         processManagerService.Build();
     }
     

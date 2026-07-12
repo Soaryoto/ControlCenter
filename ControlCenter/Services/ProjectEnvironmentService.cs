@@ -13,7 +13,16 @@ public sealed class ProjectEnvironmentService : IProjectEnvironmentService
     public ProjectEnvironmentService()
     {
         ProjectRootPath = FindPath(_rootSettingsDirName);
-        LogsPath = Path.Combine(ProjectRootPath, _rootSettingsDirName, "logs");
+        LogsPath = CheckPathExists(Path.Combine(ProjectRootPath, _rootSettingsDirName, "logs"));
+    }
+
+    private string CheckPathExists(string path)
+    {
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+        return path;
     }
 
     private string FindPath(string pathName)

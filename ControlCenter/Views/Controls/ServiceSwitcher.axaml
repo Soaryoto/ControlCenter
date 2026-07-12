@@ -13,17 +13,21 @@
                     Margin="2">
 
                     <TextBlock Text="{Binding Name}"
-                        Grid.Column="0"
+                        Grid.Row="0" Grid.Column="0"
                         FontSize="12" TextWrapping="Wrap" FontFamily="Consolas"/>
 
                     <TextBlock Text=")"
-                        Grid.Column="1"
+                        Grid.Row="0" Grid.Column="1"
                         FontSize="12" TextWrapping="Wrap" FontFamily="Consolas"/>
 
                     <TextBlock Text="{Binding State}"
-                        Grid.Column="2"
+                        Grid.Row="0" Grid.Column="2"
                         FontSize="12" TextWrapping="Wrap" FontFamily="Consolas"/>
 
+                    <Button
+                        Grid.Row="0" Grid.Column="3"
+                        Content="Переключить состояние"
+                        Command="{Binding ToggleCommand}" />
                 </Grid>
             </DataTemplate>
         </ListBox.ItemTemplate>

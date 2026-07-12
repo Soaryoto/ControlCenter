@@ -18,7 +18,7 @@ sealed class ReactService : BaseControllableService, IReactService
             Name = "ReactAvatar",
             ProcessTypeName = ProcessTypeName.ReactAvatar,
             Executable = "cmd.exe",
-            Arguments = "/C npm run dev",
+            Arguments = "/C npm run preview",
             WorkingDirectory = _reactPath
         };
 

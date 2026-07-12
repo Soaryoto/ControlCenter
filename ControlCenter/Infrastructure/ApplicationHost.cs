@@ -25,6 +25,8 @@ sealed class ApplicationHost
 
     private void InitServices()
     {
+        _services.RegisterSingleton<IProjectEnvironmentService, ProjectEnvironmentService>();
+
         _services.RegisterSingleton<ILoggingService, LoggingService>();
         _services.RegisterAlias<ILoggingServiceReader, LoggingService>();
 

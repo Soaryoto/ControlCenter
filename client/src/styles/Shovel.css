@@ -1,0 +1,8 @@
+.shovel {
+    position: absolute;
+    top: 953px;
+    left: 160px;
+    width: 516.375px; 
+    height: 501.250px;
+    transform: scaleX(-1) rotate(20deg);
+}

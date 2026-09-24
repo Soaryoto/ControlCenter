@@ -1,3 +1,12 @@
+// Copyright (C) 2026 Soaryoto
+//
+// This file is part of StreamingController.
+//
+// Licensed under the GNU General Public License v3.0 or later.
+// See LICENSE for the full license text.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 import { useState, useEffect  } from "react";
 import "./App.css";
 
@@ -10,8 +19,9 @@ import Avatar from "./components/Avatar";
 import CupOfCoffee from "./components/CupOfCoffee";
 import SteamFromCup from "./components/SteamFromCup";
 import EyeComponent from "./components/EyeComponent";
-import CapComponent from "./components/CapComponent";
 import PistolWithSilencer from "./components/PistolWithSilencer";
+import Lamp from "./components/Lamp";
+import Shovel from "./components/Shovel";
 
 
 function App() {
@@ -37,8 +47,10 @@ function App() {
         <Avatar isTalking={isTalking} />
         <EyeComponent />
         {/* <PistolWithSilencer /> */}
-        <CupOfCoffee />
-        <SteamFromCup />
+        <Lamp />
+        <Shovel /> 
+        {/* <CupOfCoffee /> */}
+        {/* <SteamFromCup /> */}
       </div>
     );
 }

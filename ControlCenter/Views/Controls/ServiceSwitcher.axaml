@@ -6,10 +6,10 @@
     x:Class="Soaryoto.Views.Controls.ServiceSwitcher"
     x:DataType="vm:ServiceSwitcherViewModel">
 
-    <ListBox x:Name="ServicesListBox" ItemsSource="{Binding ServicesItems}">
+    <ListBox Classes="DefaultBGStyleListBox DefaultBorderStyleListBox" x:Name="ServicesListBox" ItemsSource="{Binding ServicesItems}">
         <ListBox.ItemTemplate>
             <DataTemplate x:DataType="model:ServiceItemViewModel">
-                <Grid ColumnDefinitions="Auto,Auto,*"
+                <Grid ColumnDefinitions="*,Auto,Auto,Auto"
                     Margin="2">
 
                     <TextBlock Text="{Binding Name}"
@@ -24,7 +24,7 @@
                         Grid.Row="0" Grid.Column="2"
                         FontSize="12" TextWrapping="Wrap" FontFamily="Consolas"/>
 
-                    <Button
+                    <Button Classes="primary"
                         Grid.Row="0" Grid.Column="3"
                         Content="Переключить состояние"
                         Command="{Binding ToggleCommand}" />

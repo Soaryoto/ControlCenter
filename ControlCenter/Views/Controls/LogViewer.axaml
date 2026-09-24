@@ -6,7 +6,7 @@
     x:Class="Soaryoto.Views.Controls.LogViewer"
     x:DataType="vm:LogViewerViewModel">
 
-    <ListBox x:Name="LogListBox" ItemsSource="{Binding Logs}">
+    <ListBox Classes="DefaultBGStyleListBox DefaultBorderStyleListBox" x:Name="LogListBox" ItemsSource="{Binding Logs}">
         <ListBox.ItemTemplate>
             <DataTemplate x:DataType="model:LogEntry">
                 <Grid ColumnDefinitions="Auto,Auto,*"

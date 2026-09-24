@@ -14,7 +14,7 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <Grid>
+    <Grid Classes="DefaultStyleGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="2*"/>
@@ -24,8 +24,16 @@
         <controls:LogViewer DataContext="{Binding LogsData}"
             Grid.Row="0" Grid.Column="0"/>
             
-
-        <TextBox Text="Test" Grid.Row="0" Grid.Column="1"/>
+        <Grid
+            Grid.Row="0" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <TextBox IsReadOnly="True" Text="Test" Grid.Row="0" Grid.Column="0"/>
+            <TextBox Text="Test" Grid.Row="1" Grid.Column="0"/>
+        </Grid>
         
         <controls:ServiceSwitcher DataContext="{Binding ServiceSwitcherData}"
             Grid.Row="0" Grid.Column="2"/>

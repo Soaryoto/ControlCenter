@@ -8,8 +8,18 @@
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
-  
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Styles/Colors.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+
     <Application.Styles>
         <FluentTheme />
+        <StyleInclude Source="/Styles/Global.axaml"/>
+        <StyleInclude Source="/Styles/Buttons.axaml"/>
     </Application.Styles>
 </Application>

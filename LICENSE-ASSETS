@@ -1,0 +1,137 @@
+StreamingController
+Artwork and Visual Assets License
+
+Copyright (C) 2026 Soaryoto
+All rights reserved.
+
+Artwork Components
+
+The avatar may be distributed as multiple files, layers, images,
+expressions, poses, or other graphical components for technical
+purposes.
+
+These components are part of the same artwork and character design
+where they are used to construct or represent the character.
+
+Separating the artwork into individual files does not grant any
+additional ownership or licensing rights to those components.
+
+1. SCOPE
+
+This license applies to the artwork, character design and visual assets
+distributed with the StreamingController project.
+
+This includes, but is not limited to:
+
+- the original character design created by Soaryoto;
+- avatar artwork;
+- character poses and expressions;
+- avatar images;
+- individual graphical components used to construct the avatar;
+- visual assets located in the client/assets/avatar/ directory;
+- exported versions and technical derivatives of the above artwork
+created by the copyright holder and included with the project.
+- application icons containing or depicting the character;
+
+2. SEPARATION FROM THE SOFTWARE LICENSE
+
+The artwork and visual assets covered by this license are separate from
+the source code of StreamingController.
+
+The GNU General Public License version 3 (GPLv3) applies to the
+StreamingController source code only.
+
+The artwork and visual assets covered by this file are NOT licensed
+under the GPLv3.
+
+Nothing in the GPLv3 license grants permission to use, reproduce,
+modify, distribute, sell, sublicense, or otherwise exploit the artwork
+or character design covered by this license.
+
+3. COPYRIGHT
+
+The copyright and other applicable rights in the artwork and character
+design remain with the copyright holder.
+
+The fact that the artwork is distributed together with StreamingController
+does not transfer ownership of the artwork or character design.
+
+4. PERMITTED USE
+
+You may view the artwork as part of the StreamingController project.
+
+You may use the artwork solely as part of an unmodified distribution of
+StreamingController, provided that:
+
+- the artwork remains unchanged;
+- the copyright and attribution information is retained;
+- the artwork is not presented as your own creation;
+- the artwork is not separated from StreamingController for independent
+  distribution or use.
+
+This permission does not grant a general license to the artwork.
+
+5. RESTRICTIONS
+
+Without explicit permission from the copyright holder, you may not:
+
+- claim authorship of the artwork or character design;
+- present the character as your original character;
+- remove or alter copyright or attribution notices in order to claim
+  authorship;
+- distribute the artwork as a standalone asset pack;
+- sell the artwork or character design;
+- sublicense the artwork;
+- use the artwork or character design as branding for another project;
+- use the artwork or character design to represent another person,
+  organization, product, service, or project;
+- redistribute modified versions of the artwork;
+- create and distribute derivative artwork based directly on the
+  supplied artwork or character design without permission.
+
+6. SOURCE CODE AND DERIVATIVE SOFTWARE
+
+The GPLv3 license permits modification and redistribution of the
+StreamingController source code according to its terms.
+
+However, modifying the source code does not grant permission to modify,
+replace, redistribute, or relicense the artwork covered by this license.
+
+A fork or derivative software project may therefore use the GPLv3-licensed
+source code without receiving ownership or additional rights to the
+artwork.
+
+7. ATTRIBUTION
+
+When the artwork is used with permission, attribution should identify
+the character and its creator as follows:
+
+"Soaryoto — original character and artwork"
+
+Where practical, attribution should also provide a link to:
+
+https://github.com/Soaryoto
+
+8. REQUESTS FOR ADDITIONAL PERMISSION
+
+Additional uses of the artwork or character design may be permitted by
+the copyright holder on a case-by-case basis.
+
+Permission should be obtained before using the artwork outside the
+permissions explicitly granted by this license.
+
+9. NO TRANSFER OF OWNERSHIP
+
+This license grants limited permission to use the artwork under the
+conditions stated above.
+
+It does not transfer copyright, ownership, authorship, or any other
+property rights in the artwork or character design.
+
+10. RESERVATION OF RIGHTS
+
+All rights not expressly granted by this license are reserved by the
+copyright holder.
+
+Copyright (C) 2026 Soaryoto
+All rights reserved.

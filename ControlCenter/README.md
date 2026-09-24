@@ -35,3 +35,8 @@ ControlCenter/
 Используемые технологии:
 Avalonia - 12.0.4
 CommunityToolkit.Mvvm - 8.4.1
+
+## License
+
+GNU GPLv3.
+See [LICENSE](LICENSE).
